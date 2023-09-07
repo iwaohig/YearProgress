@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year Progress</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: #121212;
+            color: #ffffff;
+        }
+
+        #progressContainer {
+            width: 90%;
+            background: linear-gradient(145deg, #1e1e1e, #242424);
+            margin: 20px auto;
+            border-radius: 15px;
+            position: relative;
+            padding-top: 60px;
+            box-shadow:
+                6px 6px 16px #0a0a0a,
+                -6px -6px 16px #2e2e2e,
+                0 0 25px rgba(255, 65, 108, 0.4),
+                0 0 15px rgba(255, 75, 43, 0.4);
+        }
+
+
+        #currentDate {
+            position: absolute;
+            top: -0px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        #currentTime {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        #progressBar {
+            width: 0;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            border-radius: 15px;
+            background: linear-gradient(90deg, #FF416C, #FF4B2B);
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="progressContainer">
+        <div id="currentDate">0000-00-00</div>
+        <div id="currentTime">00:00:00</div>
+        <div id="progressBar">0%</div>
+    </div>
+
+    <script>
+        function calculateYearProgress() {
+            const now = new Date();
+            const startOfYear = new Date(now.getFullYear(), 0, 1);
+            const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
+
+            const passedTime = now - startOfYear;
+            const totalTime = endOfYear - startOfYear;
+
+            return (passedTime / totalTime) * 100;
+        }
+
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            const progressPercentage = calculateYearProgress();
+
+            progressBar.style.width = `${progressPercentage}%`;
+            progressBar.textContent = `${Math.round(progressPercentage)}%`;
+        }
+
+        function updateTime() {
+            const timeDisplay = document.getElementById('currentTime');
+            const now = new Date();
+
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            timeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        function updateDate() {
+            const dateDisplay = document.getElementById('currentDate');
+            const now = new Date();
+
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');  // Month is 0-indexed
+            const day = String(now.getDate()).padStart(2, '0');
+
+            dateDisplay.textContent = `${year}-${month}-${day}`;
+        }
+
+        updateProgressBar();
+        updateTime();
+        updateDate();
+
+        setInterval(() => {
+            updateTime();
+            updateDate();
+        }, 1000);  // Every second
+    </script>
+
+</body>
+
+</html>
